@@ -1,213 +1,96 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include "Common.h"
-#include "Pixel.h"
-
 /*
- * Slice_iter and Cslice_iter are from the following:
- * http://www.stroustrup.com/3rd_code.html
+ * After reading the following book, I separate storage and image 
+ * manipulation into separate files. (i.e. Image.h and Storage.h)
+ *
+ * "Applied C++ Practical Techniques for Building Better Software"
  */
 
-// Forward declarations to allow friend declarations:
-template<class T> class Slice_iter;
-template<class T> bool operator==(const Slice_iter<T>&, const Slice_iter<T>&);
-template<class T> bool operator!=(const Slice_iter<T>&, const Slice_iter<T>&);
-template<class T> bool operator< (const Slice_iter<T>&, const Slice_iter<T>&);
+#include "Pixel.h"
+#include "Storage.h"
 
-template<class T> class Slice_iter {
-	T* v;
-	slice s;
-	size_t curr;	// index of current element
+template<typename T, typename A>
+class Image;
 
-	T& ref(size_t i) const {
-        return v[s.start() + i * s.stride()];
-    }
+template <class S1, class S2, class A1, class A2>
+Image<S2, A2> convert(const Image<S1, A1> &image);
 
-public:
-	Slice_iter(T* vv, slice ss) :v(vv), s(ss), curr(0) { }
-
-	Slice_iter end() const
-	{
-		Slice_iter t = *this;
-		t.curr = s.size();	// index of last-plus-one element
-		return t;
-	}
-
-	Slice_iter& operator++() { curr++; return *this; }
-	Slice_iter operator++(int) { Slice_iter t = *this; curr++; return t; }
-
-	T& operator[](size_t i) { return ref(i); }		// C style subscript
-	T& operator()(size_t i) { return ref(i); }		// Fortran-style subscript
-	T& operator*() { return ref(curr); }			// current element
-
-	friend bool operator==<>(const Slice_iter& p, const Slice_iter& q);
-	friend bool operator!=<>(const Slice_iter& p, const Slice_iter& q);
-	friend bool operator< <>(const Slice_iter& p, const Slice_iter& q);
-
-};
-
-template<class T>
-bool operator==(const Slice_iter<T>& p, const Slice_iter<T>& q)
-{
-	return p.curr==q.curr
-		&& p.s.stride()==q.s.stride()
-		&& p.s.start()==q.s.start();
-}
-
-template<class T>
-bool operator!=(const Slice_iter<T>& p, const Slice_iter<T>& q)
-{
-	return !(p==q);
-}
-
-template<class T>
-bool operator<(const Slice_iter<T>& p, const Slice_iter<T>& q)
-{
-	return p.curr<q.curr
-		&& p.s.stride()==q.s.stride()
-		&& p.s.start()==q.s.start();
-}
-
-// forward declarations to allow friend declarations:
-template<class T> class Cslice_iter;
-template<class T> bool operator==(const Cslice_iter<T>&, const Cslice_iter<T>&);
-template<class T> bool operator!=(const Cslice_iter<T>&, const Cslice_iter<T>&);
-template<class T> bool operator< (const Cslice_iter<T>&, const Cslice_iter<T>&);
-
-template<class T> class Cslice_iter 
-{
-	T* v;
-	slice s;
-	size_t curr; // index of current element
-	const T& ref(size_t i) const { return v[s.start()+i*s.stride()]; }
-public:
-	Cslice_iter(T* vv, slice ss): v(vv), s(ss), curr(0){}
-	Cslice_iter end() const
-	{
-		Cslice_iter t = *this;
-		t.curr = s.size(); // index of one plus last element
-		return t;
-	}
-	Cslice_iter& operator++() { curr++; return *this; }
-	Cslice_iter operator++(int) { Cslice_iter t = *this; curr++; return t; }
-	
-	const T& operator[](size_t i) const { return ref(i); }
-	const T& operator()(size_t i) const { return ref(i); }
-	const T& operator*() const { return ref(curr); }
-
-	friend bool operator==<>(const Cslice_iter& p, const Cslice_iter& q);
-	friend bool operator!=<>(const Cslice_iter& p, const Cslice_iter& q);
-	friend bool operator< <>(const Cslice_iter& p, const Cslice_iter& q);
-
-};
-
-template<class T>
-bool operator==(const Cslice_iter<T>& p, const Cslice_iter<T>& q)
-{
-	return p.curr==q.curr
-		&& p.s.stride()==q.s.stride()
-		&& p.s.start()==q.s.start();
-}
-
-template<class T>
-bool operator!=(const Cslice_iter<T>& p, const Cslice_iter<T>& q)
-{
-	return !(p==q);
-}
-
-template<class T>
-bool operator<(const Cslice_iter<T>& p, const Cslice_iter<T>& q)
-{
-	return p.curr<q.curr
-		&& p.s.stride()==q.s.stride()
-		&& p.s.start()==q.s.start();
-}
-
-template<class T>
+template<typename T, typename A = PixelStorage<T>>
 class Image {
+    typedef typename T::value_type pixel_type;
+    typedef typename T::value_type value_type;
+    typedef typename A::iterator   iterator;
+
 public:
-    Image()
-        : mWidth(0),
-          mHeight(0),
-          mDepth(0) {
-        mPixel = new T[0];
+    Image() {
     }
 
     Image(size_t width,
-          size_t height)
-        : mWidth(width),
-          mHeight(height) {
-        mPixel = new T[width * height];
+          size_t height,
+          size_t stride = 0)
+        : storage_(width, height, stride) {
+        assert(width >= 0);
+        assert(height >= 0);
     }
 
-    Image(Image<T> &other) {
-        if (other != *this) {
-            mWidth  = other.mWidth;
-            mHeight = other.mHeight;
-            if (mPixel) {
-                delete[] mPixel;
-            }
-
-            memcpy(mPixel, other.mPixel, mWidth * mHeight * sizeof(T));
-        }
+    Image(const Image &other) {
+        storage_ = other.storage_;
     }
 
-    Image(Image<T> &&rvalue)
-        : mWidth(rvalue.mWidth),
-          mHeight(rvalue.mHeight) {
-        if (mPixel) {
-            delete[] mPixel;
-        }
-
-        mPixel = move(rvalue.mPixel);
+    template<class From>
+    Image(const Image<From>& other) {
+        *this = convert<From, T>(other);
     }
 
     virtual ~Image() {
-        delete[] mPixel;
     }
 
     size_t width() const {
-        return mWidth;
+        return storage_.width();
     }
 
     size_t height() const {
-        return mHeight;
+        return storage_.height();
     }
 
-    Slice_iter<T> operator[](size_t x) {
-        return column(x);
+    size_t stride() const  {
+        return storage_.stride();
+    }
+    
+    const T& getPixel(int x, int y) const {
+        return storage_.getPixel (x, y);
     }
 
-	Cslice_iter<T> operator[](size_t x) const { 
-        return column(x);
+    void setPixel(int32_t x, int32_t y, const T& pixel) {
+        storage_.setPixel (x, y, pixel);
+    }
+
+    iterator begin() {
+        return storage_.begin();
+    }
+
+    const iterator begin() const {
+        return storage_.begin();
+    }
+
+    iterator end() {
+        return storage_.end();
+    }
+
+    const iterator end() const {
+        return storage_.end();
+    }
+    
+    template<typename S>
+    Image<T>& operator=(const Image<S> &other) {
+        Image<T> temp(other);
+        return temp;
     }
 
 private:
-    inline Slice_iter<T> row(size_t index)
-    {
-        return Slice_iter<T>(mPixel, slice(index, mWidth, mHeight));
-    }
-
-    inline Cslice_iter<T> row(size_t index) const
-    {
-        return Cslice_iter<T>(mPixel, slice(index, mWidth, mHeight));
-    }
-
-    inline Slice_iter<T> column(size_t index)
-    {
-        return Slice_iter<T>(mPixel, slice(index * mHeight, mHeight, 1));
-    }
-
-    inline Cslice_iter<T> column(size_t index) const
-    {
-        return Cslice_iter<T>(mPixel, slice(index * mHeight, mHeight, 1));
-    }
-
-    size_t mWidth;
-    size_t mHeight;
-    size_t mDepth;
-    T*     mPixel;
+    A storage_;
 };
 
 #endif  // __IMAGE_H__

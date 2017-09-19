@@ -1,7 +1,10 @@
 #ifndef __CONVOLVE_H__
 #define __CONVOLVE_H__
 
-size_t reflect(size_t size, int x) {
+#include "Common.h"
+#include "Precision.h"
+
+size_t reflect(size_t size, int32_t x) {
     if (x < 0)
         return -x - 1;
     else if(x >= size)
@@ -9,7 +12,7 @@ size_t reflect(size_t size, int x) {
     return x;
 }
 
-size_t circular(size_t size, int x) {
+size_t circular(size_t size, int32_t x) {
     if (x < 0)
         return x + size;
     else if(x >= size)
@@ -18,26 +21,25 @@ size_t circular(size_t size, int x) {
 }
 
 /* Assume the kernel is symmetric */
-template <typename T, size_t N, size_t policy(size_t, int)>
-Image<T> convolve(const Image<T> &image, double kernel[N][N]) {
+template <typename T, size_t policy(size_t, int32_t) = reflect>
+Image<T> convolve(const Image<T> &image, const FracType<T> *kernel, size_t n) {
     size_t width  = image.width();
     size_t height = image.height();
-    size_t bias  = N / 2;
     
     Image<T> output(width, height);
     for(int32_t y = 0; y < height; y++) {
         for(int32_t x = 0; x < width; x++) {
-            double sumVal = (double)0.0f;
-            for(int32_t ky = -bias; ky <= bias; ky++) {
-                for(int32_t kx = -bias; kx <= bias; kx++ ) {
+            PixelType<T> sumVal = { 0 };
+            for(int32_t ky = 0; ky < n; ky++) {
+                for(int32_t kx = 0; kx < n; kx++ ) {
                     size_t y1 = policy(height, y - ky);
                     size_t x1 = policy(width,  x - kx);
-                    // TBD: 2 or 3 channels
-                    sumVal += kernel[kx + bias][ky + bias] * image[x1][y1].data[0];
+                    sumVal += static_cast<PixelType<T>>(image.getPixel(x1, y1)) * kernel[ky * n + kx];
                 }
             }
 
-            output[x][y].data[0] = sumVal;
+            // Clamp the intermediate value
+            output.setPixel(x, y, static_cast<T>(sumVal));
         }
     }
     

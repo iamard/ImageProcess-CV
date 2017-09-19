@@ -4,10 +4,12 @@
 #include <cstdio>
 #include <cstdint>
 #include <cmath>
+#include <cassert>
 #include <utility>
 #include <array>
 #include<valarray>
 #include<algorithm>
+#include <memory>
 using namespace std;
 
 typedef signed char int8_t;
