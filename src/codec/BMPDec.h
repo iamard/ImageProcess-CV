@@ -3,6 +3,7 @@
 
 #include "FileInStream.h"
 #include "Image.h"
+#include "Convert.h"
 
 class BMPDec
 {

@@ -24,7 +24,7 @@ template <typename T>
 using PixelType = typename Precision<T>::pixel_type;
 
 template <typename T>
-using ValueType = typename Precision<T>::frac_type;
+using ValueType = typename Precision<T>::value_type;
 
 template <typename T>
 using FracType = typename Precision<T>::frac_type;

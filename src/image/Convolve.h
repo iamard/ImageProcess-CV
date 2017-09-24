@@ -2,6 +2,7 @@
 #define __CONVOLVE_H__
 
 #include "Common.h"
+#include "Functor.h"
 #include "Precision.h"
 
 size_t reflect(size_t size, int32_t x) {
@@ -20,9 +21,8 @@ size_t circular(size_t size, int32_t x) {
     return x;
 }
 
-/* Assume the kernel is symmetric */
 template <typename T, size_t policy(size_t, int32_t) = reflect>
-Image<T> convolve(const Image<T> &image, const FracType<T> *kernel, size_t n) {
+Image<T> convolve_generic(const Image<T> &image, const FracType<T> *kernel, size_t n) {
     size_t width  = image.width();
     size_t height = image.height();
     
@@ -44,6 +44,13 @@ Image<T> convolve(const Image<T> &image, const FracType<T> *kernel, size_t n) {
     }
     
     return output;
+}
+
+/* Assume the kernel is symmetric */
+template <typename T, size_t policy(size_t, int32_t) = reflect>
+Image<T> convolve(const Image<T> &image, const FracType<T> *kernel, size_t n) {
+    Convolver<T> device(convolve_generic);
+    return device.dispatch(image, kernel, n);
 }
 
 #endif  // __CONVOLVE_H__
