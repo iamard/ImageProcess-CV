@@ -45,14 +45,14 @@ struct pixel_value_clamp {
 
 enum class color: std::uint8_t { MONO, RGB, OTHER };
 
-template<typename V, typename P, size_t channels>
+template<color C, typename V, typename P, size_t N>
 struct pixel_trait_base {
     typedef V value_type;
     typedef P pixel_type;
 
-    //static constexpr uint8_t color_space     = color; 
-    static constexpr size_t  channel_count   = channels;
-    static constexpr size_t  bytes_per_pixel = sizeof(V) * channels;
+    static constexpr color  color_space     = C;
+    static constexpr size_t num_channels    = N;
+    static constexpr size_t bytes_per_pixel = sizeof(V) * N;
 
     pixel_type operator+(const value_type& value) const {
         return static_cast<const pixel_type*>(this)->add_value(value);
@@ -116,11 +116,15 @@ struct pixel_trait_base {
 
     pixel_type& operator/=(const pixel_type& value) {
         return static_cast<pixel_type*>(this)->div_assign(value);
-    } 
+    }
+
+    //bool operator==() {
+    //    
+    //}
 };
 
 template<typename T>
-struct mono_pixel_trait: public pixel_trait_base<T, mono_pixel_trait<T>, 1>
+struct mono_pixel_trait: public pixel_trait_base<color::MONO, T, mono_pixel_trait<T>, 1>
 {
     T value;
 
@@ -221,7 +225,7 @@ typedef mono_pixel_trait<uint8_t>  GRAY8;
 typedef mono_pixel_trait<uint32_t> GRAY32;
 
 template<typename T>
-struct rgb_pixel_trait: public pixel_trait_base<T, rgb_pixel_trait<T>, 3> 
+struct rgb_pixel_trait: public pixel_trait_base<color::RGB, T, rgb_pixel_trait<T>, 3> 
 {
     T red;
     T green;

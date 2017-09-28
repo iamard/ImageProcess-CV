@@ -6,7 +6,19 @@
 
 template <typename S, typename T>
 Image<T> convert(const Image<S> &image) {
-    printf("error\n");
+    if ((S::color_space  == T::color::space) &&
+        (S::num_channels == T::num_channels)) {
+        Image<T> output;
+        for (int32_t y = 0; y < image.height(); y++) {
+            for (int32_t x = 0; x < image.width(); x++) {
+                output.setPixel(x, y, static_cast<T>(image.getPixel(x, y)));
+            }
+        }
+        return output;
+    } else {
+        // Should be done by specified converter
+        assert(0);
+    }
 }
 
 template<>
@@ -21,16 +33,6 @@ Image<GRAY8> convert(const Image<RGB888> &image) {
             GRAY8 temp;
             convert(image.getPixel(x, y), temp);
             output.setPixel(x, y, temp);
-        }
-    }
-    return output;
-}
-template<>
-Image<GRAY32> convert(const Image<GRAY8> &image) {
-    Image<GRAY32> output;
-    for (int32_t y = 0; y < image.height(); y++) {
-        for (int32_t x = 0; x < image.width(); x++) {
-            output.setPixel(x, y, static_cast<GRAY32>(image.getPixel(x, y)));
         }
     }
     return output;
