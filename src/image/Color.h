@@ -4,15 +4,16 @@
 #include "Pixel.h"
 
 template<typename S, typename T>
-void convert(const mono_pixel_trait<S> &src,
-             rgb_pixel_trait<T>        &dst) {
-    dst = rgb_pixel_trait<T>(src.value, src.vaue, src.value);
+void convert(const S &src, T &dst);
+
+template<>
+void convert(const GRAY_8 &src, RGB_888 &dst) {
+    dst = RGB_888(src.value, src.value, src.value);
 }
 
-template<typename S, typename T>
-void convert(const rgb_pixel_trait<S> &src,
-             mono_pixel_trait<T>      &dst) {
-    dst = mono_pixel_trait<T>((src.red + src.green + src.blue) / 3);
+template<>
+void convert(const RGB_888 &src, GRAY_8 &dst) {
+    dst = GRAY_8((src.red + src.green + src.blue) / 3);
 }
 
 #endif  // __COLOR_H__

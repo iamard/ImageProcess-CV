@@ -43,7 +43,7 @@ struct pixel_value_clamp {
     }
 };
 
-enum class color: std::uint8_t { MONO, RGB, OTHER };
+enum class color: std::uint8_t { MONO, RGB, BGR, RGBA, BGRA, YUYV, UYVY, OTHER };
 
 template<color C, typename V, typename P, size_t N>
 struct pixel_trait_base {
@@ -117,259 +117,465 @@ struct pixel_trait_base {
     pixel_type& operator/=(const pixel_type& value) {
         return static_cast<pixel_type*>(this)->div_assign(value);
     }
-
-    //bool operator==() {
-    //    
-    //}
 };
 
-template<typename T>
-struct mono_pixel_trait: public pixel_trait_base<color::MONO, T, mono_pixel_trait<T>, 1>
-{
-    T value;
+/*
+ * The following are for 1-channel pixel format
+ */
+template <color format, typename T>
+struct pixel1_type_trait;
 
-    mono_pixel_trait()
-        : value(0) {
-    }
+#define define_pixel1_type(pixel_name, format, T, channel1)                                                             \
+template<>                                                                                                              \
+struct pixel1_type_trait<format, T>: public pixel_trait_base<format, T, pixel1_type_trait<format, T>, 1>  {             \
+    static constexpr color pixel_format = format;                                                                       \
+                                                                                                                        \
+    T channel1;                                                                                                         \
+                                                                                                                        \
+    pixel1_type_trait()                                                                                                 \
+        : channel1(0) {                                                                                                 \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait(T v)                                                                                              \
+        : channel1(v) {                                                                                                 \
+    }                                                                                                                   \
+                                                                                                                        \
+    template<typename S>                                                                                                \
+    pixel1_type_trait(const pixel1_type_trait<format, S> &other) {                                                      \
+        channel1 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel1));                                         \
+    }                                                                                                                   \
+                                                                                                                        \
+    template<typename S>                                                                                                \
+    pixel1_type_trait<format, T>& operator=(const pixel1_type_trait<format, S>& other) {                                \
+        pixel1_type_trait<format, T> temp(other);                                                                       \
+        swap(channel1, other.channel1);                                                                                 \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> add_value(const T& other) const {                                                      \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 + other));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> add_value(const pixel1_type_trait<format, T>& other) const {                           \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 + other.channel1));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> sub_value(const T& other) const {                                                      \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 - other));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> sub_value(const pixel1_type_trait<format, T>& other) const {                           \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 - other.channel1));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> mul_value(const T& other) const {                                                      \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 * other));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> mul_value(const pixel1_type_trait<format, T>& other) const {                           \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 * other.channel1));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> div_value(const T& other) const {                                                      \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 / other));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T> div_value(const pixel1_type_trait<format, T>& other) const {                           \
+        return pixel1_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 / other.channel1));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& add_assign(const T& other) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 + other);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& add_assign(const pixel1_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 + other.channel1);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& sub_assign(const T& other) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 - other);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& sub_assign(const pixel1_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 - other.channel1);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& mul_assign(const T& other) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 * other);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& mul_assign(const pixel1_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 * other.channel1);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& div_assign(const T& other) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 / other);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel1_type_trait<format, T>& div_assign(const pixel1_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 / other.channel1);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+};                                                                                                                      \
+                                                                                                                        \
+using pixel_name = pixel1_type_trait<format, T>;
 
-    mono_pixel_trait(T v)
-        : value(v) {
-    }
+define_pixel1_type(GRAY_8,   color::MONO, uint8_t, value);
+define_pixel1_type(GRAY_F32, color::MONO, float, value);
+define_pixel1_type(GRAY_F64, color::MONO, double, value);
 
-    template<typename S>
-    mono_pixel_trait(const mono_pixel_trait<S> &other) {
-        value = pixel_value_clamp<T>::clamp(other.value);
-    }
+/*
+ * The following are for 3-channel pixel format.
+ */
+template <color format, typename T>
+struct pixel3_type_trait;
 
-    template<typename S>
-    mono_pixel_trait<T>& operator=(const mono_pixel_trait<S>& other) {
-        mono_pixel_trait<T> temp(other);
-        swap(value, other.value);
-        return *this;
-    }
+#define define_pixel3_type(pixel_name, format, T, channel1, channel2, channel3)                                         \
+template<>                                                                                                              \
+struct pixel3_type_trait<format, T>: public pixel_trait_base<format, T, pixel3_type_trait<format, T>, 3>  {             \
+    static constexpr color pixel_format = format;                                                                       \
+                                                                                                                        \
+    T channel1;                                                                                                         \
+    T channel2;                                                                                                         \
+    T channel3;                                                                                                         \
+                                                                                                                        \
+    pixel3_type_trait()                                                                                                 \
+        : channel1(0),                                                                                                  \
+          channel2(0),                                                                                                  \
+          channel3(0) {                                                                                                 \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait(T value)                                                                                          \
+        : channel1(value),                                                                                              \
+          channel2(value),                                                                                              \
+          channel3(value) {                                                                                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait(T v1, T v2, T v3)                                                                                 \
+        : channel1(v1),                                                                                                 \
+          channel2(v2),                                                                                                 \
+          channel3(v3) {                                                                                                \
+    }                                                                                                                   \
+                                                                                                                        \
+    template<typename S>                                                                                                \
+    pixel3_type_trait(const pixel3_type_trait<format, S> &other) {                                                      \
+        channel1 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel1));                                         \
+        channel2 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel2));                                         \
+        channel3 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel3));                                         \
+        printf("%d %d %d\n", channel1, channel2, channel3); \
+    }                                                                                                                   \
+                                                                                                                        \
+    template<typename S>                                                                                                \
+    pixel3_type_trait<format, T>& operator=(const pixel3_type_trait<format, S>& other) {                                \
+        pixel3_type_trait<format, T> temp(other);                                                                       \
+        swap(channel1, other.channel1);                                                                                 \
+        swap(channel2, other.channel2);                                                                                 \
+        swap(channel3, other.channel3);                                                                                 \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> add_value(const T& value) const {                                                      \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 + value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 + value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 + value));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> add_value(const pixel3_type_trait<format, T>& other) const {                           \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 + other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 + other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 + other.channel3));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> sub_value(const T& value) const {                                                      \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 - value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 - value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 - value));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> sub_value(const pixel3_type_trait<format, T>& other) const {                           \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 - other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 - other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 - other.channel3));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> mul_value(const T& value) const {                                                      \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 * value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 * value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 * value));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> mul_value(const pixel3_type_trait<format, T>& other) const {                           \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 * other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 * other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 * other.channel3));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> div_value(const T& value) const {                                                      \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 / value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 / value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 / value));                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T> div_value(const pixel3_type_trait<format, T>& other) const {                           \
+        return pixel3_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 / other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 / other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 / other.channel3));                    \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& add_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 + value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 + value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 + value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& add_assign(const pixel3_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 + other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 + other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 + other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& sub_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 - value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 - value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 - value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& sub_assign(const pixel3_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 - other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 - other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 - other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& mul_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 * value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 * value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 * value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& mul_assign(const pixel3_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 * other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 * other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 * other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& div_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 / value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 / value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 / value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel3_type_trait<format, T>& div_assign(const pixel3_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 / other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 / other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 / other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+};                                                                                                                      \
+                                                                                                                        \
+using pixel_name = pixel3_type_trait<format, T>;
 
-    mono_pixel_trait<T> add_value(const T &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value + other));
-    }
-    
-    mono_pixel_trait<T> add_value(const mono_pixel_trait<T> &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value + other.value));
-    }
+define_pixel3_type(RGB_888, color::RGB, uint8_t, red, green, blue);
+define_pixel3_type(RGB_F32, color::RGB, float, red, green, blue);
+define_pixel3_type(RGB_F64, color::RGB, double, red, green, blue);
+define_pixel3_type(BGR_888, color::BGR, uint8_t, blue, green, red);
+define_pixel3_type(BGR_F32, color::BGR, float, blue, green, red);
+define_pixel3_type(BGR_F64, color::BGR, double, blue, green, red);
 
-    mono_pixel_trait<T> sub_value(const T &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value - other));
-    }
-    
-    mono_pixel_trait<T> sub_value(const mono_pixel_trait<T> &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value - other.value));
-    }
+/*
+ * The following are for 4-channel pixel format.
+ */
+template <color format, typename T>
+struct pixel4_type_trait;
 
-    mono_pixel_trait<T> mul_value(const T &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value * other));
-    }
+#define define_pixel4_type(pixel_name, format, T, channel1, channel2, channel3, channel4)                               \
+template<>                                                                                                              \
+struct pixel4_type_trait<format, T>: public pixel_trait_base<format, T, pixel4_type_trait<format, T>, 4>  {             \
+    static constexpr color pixel_format = format;                                                                       \
+                                                                                                                        \
+    T channel1;                                                                                                         \
+    T channel2;                                                                                                         \
+    T channel3;                                                                                                         \
+    T channel4;                                                                                                         \
+                                                                                                                        \
+    pixel4_type_trait()                                                                                                 \
+        : channel1(0),                                                                                                  \
+          channel2(0),                                                                                                  \
+          channel3(0),                                                                                                  \
+          channel4(0) {                                                                                                 \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait(T value)                                                                                          \
+        : channel1(value),                                                                                              \
+          channel2(value),                                                                                              \
+          channel3(value),                                                                                              \
+          channel4(value) {                                                                                             \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait(T v1, T v2, T v3, T v4)                                                                           \
+        : channel1(v1),                                                                                                 \
+          channel2(v2),                                                                                                 \
+          channel3(v3),                                                                                                 \
+          channel4(v4) {                                                                                                \
+    }                                                                                                                   \
+                                                                                                                        \
+    template<typename S>                                                                                                \
+    pixel4_type_trait(const pixel4_type_trait<format, S> &other) {                                                      \
+        channel1 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel1));                                         \
+        channel2 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel2));                                         \
+        channel3 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel3));                                         \
+        channel4 = pixel_value_clamp<T>::clamp(static_cast<T>(other.channel4));                                         \
+    }                                                                                                                   \
+                                                                                                                        \
+    template<typename S>                                                                                                \
+    pixel4_type_trait<format, T>& operator=(const pixel4_type_trait<format, S>& other) {                                \
+        pixel4_type_trait<format, T> temp(other);                                                                       \
+        swap(channel1, other.channel1);                                                                                 \
+        swap(channel2, other.channel2);                                                                                 \
+        swap(channel3, other.channel3);                                                                                 \
+        swap(channel4, other.channel4);                                                                                 \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> add_value(const T& value) const {                                                      \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 + value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 + value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 + value),                              \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> add_value(const pixel4_type_trait<format, T>& other) const {                           \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 + other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 + other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 + other.channel3),                     \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> sub_value(const T& value) const {                                                      \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 - value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 - value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 - value),                              \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> sub_value(const pixel4_type_trait<format, T>& other) const {                           \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 - other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 - other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 - other.channel3),                     \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> mul_value(const T& value) const {                                                      \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 * value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 * value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 * value),                              \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> mul_value(const pixel4_type_trait<format, T>& other) const {                           \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 * other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 * other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 * other.channel3),                     \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> div_value(const T& value) const {                                                      \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 / value),                              \
+                                            pixel_value_clamp<T>::clamp(channel2 / value),                              \
+                                            pixel_value_clamp<T>::clamp(channel3 / value),                              \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T> div_value(const pixel4_type_trait<format, T>& other) const {                           \
+        return pixel4_type_trait<format, T>(pixel_value_clamp<T>::clamp(channel1 / other.channel1),                     \
+                                            pixel_value_clamp<T>::clamp(channel2 / other.channel2),                     \
+                                            pixel_value_clamp<T>::clamp(channel3 / other.channel3),                     \
+                                            channel4);                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& add_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 + value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 + value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 + value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& add_assign(const pixel4_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 + other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 + other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 + other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& sub_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 - value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 - value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 - value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& sub_assign(const pixel4_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 - other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 - other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 - other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& mul_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 * value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 * value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 * value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& mul_assign(const pixel4_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 * other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 * other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 * other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& div_assign(const T& value) {                                                          \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 / value);                                                       \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 / value);                                                       \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 / value);                                                       \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+                                                                                                                        \
+    pixel4_type_trait<format, T>& div_assign(const pixel4_type_trait<format, T>& other) {                               \
+        channel1 = pixel_value_clamp<T>::clamp(channel1 / other.channel1);                                              \
+        channel2 = pixel_value_clamp<T>::clamp(channel2 / other.channel2);                                              \
+        channel3 = pixel_value_clamp<T>::clamp(channel3 / other.channel3);                                              \
+        return *this;                                                                                                   \
+    }                                                                                                                   \
+};                                                                                                                      \
+                                                                                                                        \
+using pixel_name = pixel4_type_trait<format, T>;
 
-    mono_pixel_trait<T> mul_value(const mono_pixel_trait<T> &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value * other.value));
-    }
-
-    mono_pixel_trait<T> div_value(const T &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value / other));
-    }
-
-    mono_pixel_trait<T> div_value(const mono_pixel_trait<T> &other) const {
-        return mono_pixel_trait<T>(pixel_value_clamp<T>::clamp(value / other.value));
-    }
-    
-    mono_pixel_trait<T>& add_assign(const T &other) {
-        value = pixel_value_clamp<T>::clamp(value + other);
-        return *this;
-    }
-    
-    mono_pixel_trait<T>& add_assign(const mono_pixel_trait<T> &other) {
-        value = pixel_value_clamp<T>::clamp(value + other.value);
-        return *this;
-    }
-
-    mono_pixel_trait<T>& sub_assign(const T &other) {
-        value = pixel_value_clamp<T>::clamp(value - other);
-        return *this;
-    }
-    
-    mono_pixel_trait<T>& sub_assign(const mono_pixel_trait<T> &other) {
-        value = pixel_value_clamp<T>::clamp(value - other.value);
-        return *this;
-    }
-    
-    mono_pixel_trait<T>& mul_assign(const T &other) {
-        value = pixel_value_clamp<T>::clamp(value * other);
-        return *this;
-    }
-
-    mono_pixel_trait<T>& mul_assign(const mono_pixel_trait<T> &other) {
-        value = pixel_value_clamp<T>::clamp(value * other.value);
-        return *this;
-    }
-
-    mono_pixel_trait<T>& div_assign(const T &other) {
-        value = pixel_value_clamp<T>::clamp(value / other);
-        return *this;
-    }
-    
-    mono_pixel_trait<T>& div_assign(const mono_pixel_trait<T> &other) {
-        value = pixel_value_clamp<T>::clamp(value / other.value);
-        return *this;
-    }
-};
-
-typedef mono_pixel_trait<uint8_t>  GRAY8;
-typedef mono_pixel_trait<uint32_t> GRAY32;
-
-template<typename T>
-struct rgb_pixel_trait: public pixel_trait_base<color::RGB, T, rgb_pixel_trait<T>, 3> 
-{
-    T red;
-    T green;
-    T blue;
-
-    rgb_pixel_trait()
-        : red(0),
-          green(0),
-          blue(0) {
-    }
-
-    rgb_pixel_trait(T value)
-        : red(value),
-          green(value),
-          blue(value) {
-    }
-
-    rgb_pixel_trait(T r, T g, T b)
-        : red(r),
-          green(g),
-          blue(b) {
-    }
-
-    template<typename S>
-    rgb_pixel_trait(const rgb_pixel_trait<S> &other) {
-        red   = pixel_value_clamp<T>::clamp(other.red);
-        green = pixel_value_clamp<T>::clamp(other.green);
-        blue  = pixel_value_clamp<T>::clamp(other.blue);
-    }
-
-    template<typename S>
-    rgb_pixel_trait<T>& operator=(const rgb_pixel_trait<S>& other) {
-        rgb_pixel_trait<T> temp(other);
-        swap(red, other.red);
-        swap(green, other.green);
-        swap(blue, other.blue);
-        return *this;
-    }
-
-    rgb_pixel_trait<T> add_value(const T& value) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   + value),
-                                  pixel_value_clamp<T>::clamp(green + value),
-                                  pixel_value_clamp<T>::clamp(blue  + value));
-    }
-
-    rgb_pixel_trait<T> add_value(const rgb_pixel_trait<T>& other) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   + other.value),
-                                  pixel_value_clamp<T>::clamp(green + other.value),
-                                  pixel_value_clamp<T>::clamp(blue  + other.value));
-    }
-    
-    rgb_pixel_trait<T> sub_value(const T& value) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   - value),
-                                  pixel_value_clamp<T>::clamp(green - value),
-                                  pixel_value_clamp<T>::clamp(blue  - value));
-    }
-
-    rgb_pixel_trait<T> sub_value(const rgb_pixel_trait<T>& other) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   - other.value),
-                                  pixel_value_clamp<T>::clamp(green - other.value),
-                                  pixel_value_clamp<T>::clamp(blue  - other.value));
-    }
-
-    rgb_pixel_trait<T> mul_value(const T& value) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   * value),
-                                  pixel_value_clamp<T>::clamp(green * value),
-                                  pixel_value_clamp<T>::clamp(blue  * value));
-    }
-
-    rgb_pixel_trait<T> mul_value(const rgb_pixel_trait<T>& other) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   * other.value),
-                                  pixel_value_clamp<T>::clamp(green * other.value),
-                                  pixel_value_clamp<T>::clamp(blue  * other.value));
-    }
-
-    rgb_pixel_trait<T> div_value(const T& value) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   / value),
-                                  pixel_value_clamp<T>::clamp(green / value),
-                                  pixel_value_clamp<T>::clamp(blue  / value));
-    }
-
-    rgb_pixel_trait<T> div_value(const rgb_pixel_trait<T>& other) const {
-        return rgb_pixel_trait<T>(pixel_value_clamp<T>::clamp(red   / other.value),
-                                  pixel_value_clamp<T>::clamp(green / other.value),
-                                  pixel_value_clamp<T>::clamp(blue  / other.value));
-    }
-
-    rgb_pixel_trait<T>& add_assign(const T& other) {
-        red   = pixel_value_clamp<T>::clamp(red   + other);
-        green = pixel_value_clamp<T>::clamp(green + other);
-        blue  = pixel_value_clamp<T>::clamp(blue  + other);
-        return *this;
-    }
-
-    rgb_pixel_trait<T>& add_assign(const rgb_pixel_trait<T>& other) {
-        red   = pixel_value_clamp<T>::clamp(red   + other.value);
-        green = pixel_value_clamp<T>::clamp(green + other.value);
-        blue  = pixel_value_clamp<T>::clamp(blue  + other.value);
-        return *this;
-    }
-
-    rgb_pixel_trait<T>& sub_assign(const T& other) {
-        red   = pixel_value_clamp<T>::clamp(red   - other);
-        green = pixel_value_clamp<T>::clamp(green - other);
-        blue  = pixel_value_clamp<T>::clamp(blue  - other);
-        return *this;
-    }
-    
-    rgb_pixel_trait<T>& sub_assign(const rgb_pixel_trait<T>& other) {
-        red   = pixel_value_clamp<T>::clamp(red   - other.value);
-        green = pixel_value_clamp<T>::clamp(green - other.value);
-        blue  = pixel_value_clamp<T>::clamp(blue  - other.value);
-        return *this;
-    }
-
-    rgb_pixel_trait<T>& mul_assign(const T& other) {
-        red   = pixel_value_clamp<T>::clamp(red   * other);
-        green = pixel_value_clamp<T>::clamp(green * other);
-        blue  = pixel_value_clamp<T>::clamp(blue  * other);
-        return *this;
-    }
-    
-    rgb_pixel_trait<T>& mul_assign(const rgb_pixel_trait<T>& other) {
-        red   = pixel_value_clamp<T>::clamp(red   * other.value);
-        green = pixel_value_clamp<T>::clamp(green * other.value);
-        blue  = pixel_value_clamp<T>::clamp(blue  * other.value);
-        return *this;
-    }
-
-    rgb_pixel_trait<T>& div_assign(const T& other) {
-        red   = pixel_value_clamp<T>::clamp(red   / other);
-        green = pixel_value_clamp<T>::clamp(green / other);
-        blue  = pixel_value_clamp<T>::clamp(blue  / other);
-        return *this;
-    }
-    
-    rgb_pixel_trait<T>& div_assign(const rgb_pixel_trait<T>& other) {
-        red   = pixel_value_clamp<T>::clamp(red   / other.value);
-        green = pixel_value_clamp<T>::clamp(green / other.value);
-        blue  = pixel_value_clamp<T>::clamp(blue  / other.value);
-        return *this;
-    }
-};
-
-typedef rgb_pixel_trait<uint8_t> RGB888;
+define_pixel4_type(RGBA_8888, color::RGBA, uint8_t, red, green, blue, alpha);
+define_pixel4_type(RGBA_F32, color::RGBA, float, red, green, blue, alpha);
+define_pixel4_type(RGBA_F64, color::RGBA, double, red, green, blue, alpha);
+define_pixel4_type(BGRA_8888, color::BGRA, uint8_t, blue, green, red, alpha);
+define_pixel4_type(BGRA_F32, color::BGRA, float, blue, green, red, alpha);
+define_pixel4_type(BGRA_F64, color::BGRA, double, blue, green, red, alpha);
+define_pixel4_type(UYVY_8888, color::UYVY, uint8_t, u, y1, v, y2);
+define_pixel4_type(UYVY_F32, color::UYVY, float, u, y1, v, y2);
+define_pixel4_type(UYVY_F64, color::UYVY, double, u, y1, v, y2);
+define_pixel4_type(YUYV_8888, color::YUYV, uint8_t, y1, u, y2, v);
+define_pixel4_type(YUYV_F32, color::YUYV, float, y1, u, y2, v);
+define_pixel4_type(YUYV_F64, color::YUYV, double, y1, u, y2, v);
 
 #endif  // __PIXEL_H__

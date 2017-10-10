@@ -4,7 +4,7 @@
 #include "FileOutStream.h"
 #include "Image.h"
 
-class BMPEnc
+class BMPEncoder
 {
     typedef struct BitmapFileHeader {
         uint16_t bfType;
@@ -15,16 +15,16 @@ class BMPEnc
     } BitmapFileHeader;
 
 public:
-    virtual ~BMPEnc() {
+    virtual ~BMPEncoder() {
     }
 
-    static unique_ptr<BMPEnc> create(const char name[]) {
+    static unique_ptr<BMPEncoder> create(const char name[]) {
         unique_ptr<FileOutStream> stream = FileOutStream::create(name);
         if (stream == nullptr) {
             return nullptr;
         }
 
-        return unique_ptr<BMPEnc>(new BMPEnc(stream));
+        return unique_ptr<BMPEncoder>(new BMPEncoder(stream));
     }
 
     template<typename T>
@@ -59,10 +59,10 @@ public:
         stream_->writeU32(0);
         stream_->writeU32(0);
 
-        if (typeid(T) == typeid(GRAY8)) {
+        if (typeid(T) == typeid(GRAY_8)) {
             return writeGray(image, width, height, padded); 
         }     
-        else if (typeid(T) == typeid(RGB888)) {
+        else if (typeid(T) == typeid(RGB_888)) {
             return writeRGB(image, width, height, padded);
         }
 
@@ -70,17 +70,17 @@ public:
     }
 
 private:
-    BMPEnc(unique_ptr<FileOutStream>& stream)
+    BMPEncoder(unique_ptr<FileOutStream>& stream)
         : stream_(move(stream)) {
     }
 
-    int32_t writeGray(const Image<GRAY8> &image,
+    int32_t writeGray(const Image<GRAY_8> &image,
                       size_t             width,
                       size_t             height,
                       size_t             padded) {
         for (int32_t y = height - 1; y >= 0; y--) {
             for (int32_t x = 0; x < width; x++) {
-                GRAY8 pixel = image.getPixel(x, y);
+                GRAY_8 pixel = image.getPixel(x, y);
                 stream_->writeU8(pixel.value);
                 stream_->writeU8(pixel.value);
                 stream_->writeU8(pixel.value);
@@ -93,13 +93,13 @@ private:
         }
     }
 
-    int32_t writeRGB(const Image<RGB888> &image,
+    int32_t writeRGB(const Image<RGB_888> &image,
                      size_t              width,
                      size_t              height,
                      size_t              padded) {
         for (int32_t y = height - 1; y >= 0; y--) {
             for (int32_t x = 0; x < width; x++) {
-                RGB888 pixel = image.getPixel(x, y);
+                RGB_888 pixel = image.getPixel(x, y);
                 stream_->writeU8(pixel.blue);
                 stream_->writeU8(pixel.green);
                 stream_->writeU8(pixel.red);

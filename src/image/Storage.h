@@ -27,13 +27,17 @@ public:
           end_(nullptr),
           bytes_(bytes) {
         assert(bytes_ != 0);
-
+        
         stride_ = (stride_ == 0)? width_ * bytes: stride_;
         size_   = stride_ * height;
+
+        printf("Create pixel buffer %d %d %d\n", width_, height_, stride_);
         
         base_ = alloc_.allocate(size_);
         end_  = base_ + (height - 1) * stride_ + width * bytes;
 
+        printf("Create pixel buffer %x %x\n", base_, end_);
+        
         assert(base_ != 0);
         assert(end_ != 0);
     }

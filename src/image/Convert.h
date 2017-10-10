@@ -6,8 +6,7 @@
 
 template <typename S, typename T>
 Image<T> convert(const Image<S> &image) {
-    if ((S::color_space  == T::color::space) &&
-        (S::num_channels == T::num_channels)) {
+    if (S::pixel_format  == T::pixel_format) {
         Image<T> output;
         for (int32_t y = 0; y < image.height(); y++) {
             for (int32_t x = 0; x < image.width(); x++) {
@@ -22,15 +21,15 @@ Image<T> convert(const Image<S> &image) {
 }
 
 template<>
-Image<GRAY8> convert(const Image<RGB888> &image) {
+Image<GRAY_8> convert(const Image<RGB_888> &image) {
     size_t width  = image.width();
     size_t height = image.height();
     size_t stride = image.stride();
  
-    Image<GRAY8> output(width, height, stride);
+    Image<GRAY_8> output(width, height, stride);
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            GRAY8 temp;
+            GRAY_8 temp;
             convert(image.getPixel(x, y), temp);
             output.setPixel(x, y, temp);
         }

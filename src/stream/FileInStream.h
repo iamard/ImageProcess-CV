@@ -46,11 +46,14 @@ public:
     }
 
     int32_t readBytes(void *pointer, size_t bytes) {
-        return fread(pointer, bytes, 1, file_);
+        return fread(pointer, 1, bytes, file_);
     }
 
     int32_t skipBytes(size_t bytes) {
-        return fseek(file_, bytes, SEEK_CUR);
+        int32_t status = fseek(file_, bytes, SEEK_CUR);
+        if (status != 0)
+            return status;
+        return bytes;
     }
 
 private:

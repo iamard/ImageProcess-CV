@@ -15,9 +15,11 @@ public:
     T* allocate(size_t n) {
         if(n > size_t(-1) / sizeof(T))
             throw bad_alloc();
-
-        if(auto p = static_cast<T*>(malloc(n * sizeof(T))))
+        
+        if(auto p = static_cast<T*>(malloc(n * sizeof(T)))) {
+            printf("Allocated %x %d\n", p, n);
             return p;
+        }
 
         throw std::bad_alloc();
     }

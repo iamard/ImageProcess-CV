@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="image"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="D:/Github/ImageProcess-CV"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="image">
+				<Option output="D:/Github/ImageProcess-CV/bin/image.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="D:/Github/ImageProcess-CV/inc"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/adapt"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/alloc"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/codec"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/image"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/stream"/>
+					<Add directory="C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include"/>
+					<Add directory="C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include-fixed"/>
+					<Add directory="C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/../../../../x86_64-w64-mingw32/include"/>
+					<Add directory="C:/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++"/>
+					<Add directory="C:/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 image"/>
+					<CompileFile command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="image/fast">
+				<Option output="D:/Github/ImageProcess-CV/bin/image.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="D:/Github/ImageProcess-CV/inc"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/adapt"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/alloc"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/codec"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/image"/>
+					<Add directory="D:/Github/ImageProcess-CV/src/stream"/>
+					<Add directory="C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include"/>
+					<Add directory="C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/include-fixed"/>
+					<Add directory="C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.1.0/../../../../x86_64-w64-mingw32/include"/>
+					<Add directory="C:/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++"/>
+					<Add directory="C:/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 image/fast"/>
+					<CompileFile command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="D:/Github/ImageProcess-CV"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="D:/Github/ImageProcess-CV"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/mingw64/bin/gmake.exe -f &quot;D:/Github/ImageProcess-CV/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="D:/Github/ImageProcess-CV/test/BMPCodec.cpp">
+			<Option target="image"/>
+		</Unit>
+		<Unit filename="D:/Github/ImageProcess-CV/test/TestBase.cpp">
+			<Option target="image"/>
+		</Unit>
+		<Unit filename="D:/Github/ImageProcess-CV/test/TestBase.h">
+			<Option target="image"/>
+		</Unit>
+		<Unit filename="D:/Github/ImageProcess-CV/test/TestMain.cpp">
+			<Option target="image"/>
+		</Unit>
+		<Unit filename="D:/Github/ImageProcess-CV/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
