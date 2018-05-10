@@ -123,32 +123,59 @@ image/fast:
 	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/build
 .PHONY : image/fast
 
-test/BMPCodec.obj: test/BMPCodec.cpp.obj
+test/BMPDecode.obj: test/BMPDecode.cpp.obj
 
-.PHONY : test/BMPCodec.obj
+.PHONY : test/BMPDecode.obj
 
 # target to build an object file
-test/BMPCodec.cpp.obj:
-	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPCodec.cpp.obj
-.PHONY : test/BMPCodec.cpp.obj
+test/BMPDecode.cpp.obj:
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPDecode.cpp.obj
+.PHONY : test/BMPDecode.cpp.obj
 
-test/BMPCodec.i: test/BMPCodec.cpp.i
+test/BMPDecode.i: test/BMPDecode.cpp.i
 
-.PHONY : test/BMPCodec.i
+.PHONY : test/BMPDecode.i
 
 # target to preprocess a source file
-test/BMPCodec.cpp.i:
-	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPCodec.cpp.i
-.PHONY : test/BMPCodec.cpp.i
+test/BMPDecode.cpp.i:
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPDecode.cpp.i
+.PHONY : test/BMPDecode.cpp.i
 
-test/BMPCodec.s: test/BMPCodec.cpp.s
+test/BMPDecode.s: test/BMPDecode.cpp.s
 
-.PHONY : test/BMPCodec.s
+.PHONY : test/BMPDecode.s
 
 # target to generate assembly for a file
-test/BMPCodec.cpp.s:
-	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPCodec.cpp.s
-.PHONY : test/BMPCodec.cpp.s
+test/BMPDecode.cpp.s:
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPDecode.cpp.s
+.PHONY : test/BMPDecode.cpp.s
+
+test/TIFFDecode.obj: test/TIFFDecode.cpp.obj
+
+.PHONY : test/TIFFDecode.obj
+
+# target to build an object file
+test/TIFFDecode.cpp.obj:
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/TIFFDecode.cpp.obj
+.PHONY : test/TIFFDecode.cpp.obj
+
+test/TIFFDecode.i: test/TIFFDecode.cpp.i
+
+.PHONY : test/TIFFDecode.i
+
+# target to preprocess a source file
+test/TIFFDecode.cpp.i:
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/TIFFDecode.cpp.i
+.PHONY : test/TIFFDecode.cpp.i
+
+test/TIFFDecode.s: test/TIFFDecode.cpp.s
+
+.PHONY : test/TIFFDecode.s
+
+# target to generate assembly for a file
+test/TIFFDecode.cpp.s:
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/TIFFDecode.cpp.s
+.PHONY : test/TIFFDecode.cpp.s
 
 test/TestBase.obj: test/TestBase.cpp.obj
 
@@ -213,9 +240,12 @@ help:
 	@echo "... image"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... test/BMPCodec.obj"
-	@echo "... test/BMPCodec.i"
-	@echo "... test/BMPCodec.s"
+	@echo "... test/BMPDecode.obj"
+	@echo "... test/BMPDecode.i"
+	@echo "... test/BMPDecode.s"
+	@echo "... test/TIFFDecode.obj"
+	@echo "... test/TIFFDecode.i"
+	@echo "... test/TIFFDecode.s"
 	@echo "... test/TestBase.obj"
 	@echo "... test/TestBase.i"
 	@echo "... test/TestBase.s"

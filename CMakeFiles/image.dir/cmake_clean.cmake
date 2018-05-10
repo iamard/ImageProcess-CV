@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/image.dir/test/BMPCodec.cpp.obj"
+  "CMakeFiles/image.dir/test/BMPDecode.cpp.obj"
+  "CMakeFiles/image.dir/test/TIFFDecode.cpp.obj"
   "CMakeFiles/image.dir/test/TestBase.cpp.obj"
   "CMakeFiles/image.dir/test/TestMain.cpp.obj"
   "bin/image.pdb"

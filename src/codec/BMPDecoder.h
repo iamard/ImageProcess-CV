@@ -1,11 +1,10 @@
 #ifndef __BMP_DECODER_H__
 #define __BMP_DECODER_H__
 
-#include "FileInStream.h"
-#include "Image.h"
+#include "DecoderBase.h"
 #include "Convert.h"
 
-class BMPDecoder
+class BMPDecoder: public DecoderBase
 { 
     typedef struct BitmapCoreHeader {
         uint32_t bcSize;
@@ -50,14 +49,6 @@ class BMPDecoder
     };
     
 public:
-    enum kDecodeStatus {
-        kDecodeSuccess = 0,
-        kIncorrectType = -1,
-        kInvalidStream = -2,
-        kCorruptStream = -3,
-        kUnknownFormat = -4
-    };
-
     static unique_ptr<BMPDecoder> create(const char name[]) {
         unique_ptr<FileInStream> stream = FileInStream::create(name);
         if (stream == nullptr) {
@@ -96,8 +87,8 @@ public:
         if (temp.width() != width || temp.height() != height) {
             temp = resize<RGB_888>(image, width, height);
         }
-    #endif
-
+    #endif // 0
+        
         image = temp;
 
         return kDecodeSuccess;

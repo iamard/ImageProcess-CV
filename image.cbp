@@ -92,7 +92,10 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="D:/Github/ImageProcess-CV/test/BMPCodec.cpp">
+		<Unit filename="D:/Github/ImageProcess-CV/test/BMPDecode.cpp">
+			<Option target="image"/>
+		</Unit>
+		<Unit filename="D:/Github/ImageProcess-CV/test/TIFFDecode.cpp">
 			<Option target="image"/>
 		</Unit>
 		<Unit filename="D:/Github/ImageProcess-CV/test/TestBase.cpp">

@@ -4,7 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/Github/ImageProcess-CV/test/BMPCodec.cpp" "D:/Github/ImageProcess-CV/CMakeFiles/image.dir/test/BMPCodec.cpp.obj"
+  "D:/Github/ImageProcess-CV/test/BMPDecode.cpp" "D:/Github/ImageProcess-CV/CMakeFiles/image.dir/test/BMPDecode.cpp.obj"
+  "D:/Github/ImageProcess-CV/test/TIFFDecode.cpp" "D:/Github/ImageProcess-CV/CMakeFiles/image.dir/test/TIFFDecode.cpp.obj"
   "D:/Github/ImageProcess-CV/test/TestBase.cpp" "D:/Github/ImageProcess-CV/CMakeFiles/image.dir/test/TestBase.cpp.obj"
   "D:/Github/ImageProcess-CV/test/TestMain.cpp" "D:/Github/ImageProcess-CV/CMakeFiles/image.dir/test/TestMain.cpp.obj"
   )

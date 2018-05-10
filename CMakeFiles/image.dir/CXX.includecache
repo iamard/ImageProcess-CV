@@ -6,13 +6,19 @@
 
 #IncludeRegexTransform: 
 
-D:/Github/ImageProcess-CV/test/BMPCodec.cpp
+D:/Github/ImageProcess-CV/test/BMPDecode.cpp
 BMPDecoder.h
 D:/Github/ImageProcess-CV/test/BMPDecoder.h
 BMPEncoder.h
 D:/Github/ImageProcess-CV/test/BMPEncoder.h
 TestBase.h
 D:/Github/ImageProcess-CV/test/TestBase.h
+
+D:/Github/ImageProcess-CV/test/TIFFDecode.cpp
+TestBase.h
+D:/Github/ImageProcess-CV/test/TestBase.h
+TIFFDecoder.h
+D:/Github/ImageProcess-CV/test/TIFFDecoder.h
 
 D:/Github/ImageProcess-CV/test/TestBase.cpp
 TestBase.h
@@ -51,10 +57,8 @@ Common.h
 src/alloc/Common.h
 
 src/codec/BMPDecoder.h
-FileInStream.h
-src/codec/FileInStream.h
-Image.h
-src/codec/Image.h
+DecoderBase.h
+src/codec/DecoderBase.h
 Convert.h
 src/codec/Convert.h
 
@@ -63,6 +67,18 @@ FileOutStream.h
 src/codec/FileOutStream.h
 Image.h
 src/codec/Image.h
+
+src/codec/DecoderBase.h
+FileInStream.h
+src/codec/FileInStream.h
+Image.h
+src/codec/Image.h
+
+src/codec/TIFFDecoder.h
+unordered_map
+-
+DecoderBase.h
+src/codec/DecoderBase.h
 
 src/image/Color.h
 Pixel.h

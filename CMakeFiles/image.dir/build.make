@@ -57,35 +57,60 @@ include CMakeFiles/image.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/image.dir/flags.make
 
-CMakeFiles/image.dir/test/BMPCodec.cpp.obj: CMakeFiles/image.dir/flags.make
-CMakeFiles/image.dir/test/BMPCodec.cpp.obj: CMakeFiles/image.dir/includes_CXX.rsp
-CMakeFiles/image.dir/test/BMPCodec.cpp.obj: test/BMPCodec.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/image.dir/test/BMPCodec.cpp.obj"
-	C:/mingw64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/image.dir/test/BMPCodec.cpp.obj -c D:/Github/ImageProcess-CV/test/BMPCodec.cpp
+CMakeFiles/image.dir/test/BMPDecode.cpp.obj: CMakeFiles/image.dir/flags.make
+CMakeFiles/image.dir/test/BMPDecode.cpp.obj: CMakeFiles/image.dir/includes_CXX.rsp
+CMakeFiles/image.dir/test/BMPDecode.cpp.obj: test/BMPDecode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/image.dir/test/BMPDecode.cpp.obj"
+	C:/mingw64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/image.dir/test/BMPDecode.cpp.obj -c D:/Github/ImageProcess-CV/test/BMPDecode.cpp
 
-CMakeFiles/image.dir/test/BMPCodec.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image.dir/test/BMPCodec.cpp.i"
-	C:/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:/Github/ImageProcess-CV/test/BMPCodec.cpp > CMakeFiles/image.dir/test/BMPCodec.cpp.i
+CMakeFiles/image.dir/test/BMPDecode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image.dir/test/BMPDecode.cpp.i"
+	C:/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:/Github/ImageProcess-CV/test/BMPDecode.cpp > CMakeFiles/image.dir/test/BMPDecode.cpp.i
 
-CMakeFiles/image.dir/test/BMPCodec.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image.dir/test/BMPCodec.cpp.s"
-	C:/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:/Github/ImageProcess-CV/test/BMPCodec.cpp -o CMakeFiles/image.dir/test/BMPCodec.cpp.s
+CMakeFiles/image.dir/test/BMPDecode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image.dir/test/BMPDecode.cpp.s"
+	C:/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:/Github/ImageProcess-CV/test/BMPDecode.cpp -o CMakeFiles/image.dir/test/BMPDecode.cpp.s
 
-CMakeFiles/image.dir/test/BMPCodec.cpp.obj.requires:
+CMakeFiles/image.dir/test/BMPDecode.cpp.obj.requires:
 
-.PHONY : CMakeFiles/image.dir/test/BMPCodec.cpp.obj.requires
+.PHONY : CMakeFiles/image.dir/test/BMPDecode.cpp.obj.requires
 
-CMakeFiles/image.dir/test/BMPCodec.cpp.obj.provides: CMakeFiles/image.dir/test/BMPCodec.cpp.obj.requires
-	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPCodec.cpp.obj.provides.build
-.PHONY : CMakeFiles/image.dir/test/BMPCodec.cpp.obj.provides
+CMakeFiles/image.dir/test/BMPDecode.cpp.obj.provides: CMakeFiles/image.dir/test/BMPDecode.cpp.obj.requires
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/BMPDecode.cpp.obj.provides.build
+.PHONY : CMakeFiles/image.dir/test/BMPDecode.cpp.obj.provides
 
-CMakeFiles/image.dir/test/BMPCodec.cpp.obj.provides.build: CMakeFiles/image.dir/test/BMPCodec.cpp.obj
+CMakeFiles/image.dir/test/BMPDecode.cpp.obj.provides.build: CMakeFiles/image.dir/test/BMPDecode.cpp.obj
+
+
+CMakeFiles/image.dir/test/TIFFDecode.cpp.obj: CMakeFiles/image.dir/flags.make
+CMakeFiles/image.dir/test/TIFFDecode.cpp.obj: CMakeFiles/image.dir/includes_CXX.rsp
+CMakeFiles/image.dir/test/TIFFDecode.cpp.obj: test/TIFFDecode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/image.dir/test/TIFFDecode.cpp.obj"
+	C:/mingw64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/image.dir/test/TIFFDecode.cpp.obj -c D:/Github/ImageProcess-CV/test/TIFFDecode.cpp
+
+CMakeFiles/image.dir/test/TIFFDecode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image.dir/test/TIFFDecode.cpp.i"
+	C:/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:/Github/ImageProcess-CV/test/TIFFDecode.cpp > CMakeFiles/image.dir/test/TIFFDecode.cpp.i
+
+CMakeFiles/image.dir/test/TIFFDecode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image.dir/test/TIFFDecode.cpp.s"
+	C:/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:/Github/ImageProcess-CV/test/TIFFDecode.cpp -o CMakeFiles/image.dir/test/TIFFDecode.cpp.s
+
+CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.requires:
+
+.PHONY : CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.requires
+
+CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.provides: CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.requires
+	$(MAKE) -f CMakeFiles/image.dir/build.make CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.provides.build
+.PHONY : CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.provides
+
+CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.provides.build: CMakeFiles/image.dir/test/TIFFDecode.cpp.obj
 
 
 CMakeFiles/image.dir/test/TestBase.cpp.obj: CMakeFiles/image.dir/flags.make
 CMakeFiles/image.dir/test/TestBase.cpp.obj: CMakeFiles/image.dir/includes_CXX.rsp
 CMakeFiles/image.dir/test/TestBase.cpp.obj: test/TestBase.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/image.dir/test/TestBase.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/image.dir/test/TestBase.cpp.obj"
 	C:/mingw64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/image.dir/test/TestBase.cpp.obj -c D:/Github/ImageProcess-CV/test/TestBase.cpp
 
 CMakeFiles/image.dir/test/TestBase.cpp.i: cmake_force
@@ -110,7 +135,7 @@ CMakeFiles/image.dir/test/TestBase.cpp.obj.provides.build: CMakeFiles/image.dir/
 CMakeFiles/image.dir/test/TestMain.cpp.obj: CMakeFiles/image.dir/flags.make
 CMakeFiles/image.dir/test/TestMain.cpp.obj: CMakeFiles/image.dir/includes_CXX.rsp
 CMakeFiles/image.dir/test/TestMain.cpp.obj: test/TestMain.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/image.dir/test/TestMain.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/image.dir/test/TestMain.cpp.obj"
 	C:/mingw64/bin/c++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/image.dir/test/TestMain.cpp.obj -c D:/Github/ImageProcess-CV/test/TestMain.cpp
 
 CMakeFiles/image.dir/test/TestMain.cpp.i: cmake_force
@@ -134,21 +159,23 @@ CMakeFiles/image.dir/test/TestMain.cpp.obj.provides.build: CMakeFiles/image.dir/
 
 # Object files for target image
 image_OBJECTS = \
-"CMakeFiles/image.dir/test/BMPCodec.cpp.obj" \
+"CMakeFiles/image.dir/test/BMPDecode.cpp.obj" \
+"CMakeFiles/image.dir/test/TIFFDecode.cpp.obj" \
 "CMakeFiles/image.dir/test/TestBase.cpp.obj" \
 "CMakeFiles/image.dir/test/TestMain.cpp.obj"
 
 # External object files for target image
 image_EXTERNAL_OBJECTS =
 
-bin/image.exe: CMakeFiles/image.dir/test/BMPCodec.cpp.obj
+bin/image.exe: CMakeFiles/image.dir/test/BMPDecode.cpp.obj
+bin/image.exe: CMakeFiles/image.dir/test/TIFFDecode.cpp.obj
 bin/image.exe: CMakeFiles/image.dir/test/TestBase.cpp.obj
 bin/image.exe: CMakeFiles/image.dir/test/TestMain.cpp.obj
 bin/image.exe: CMakeFiles/image.dir/build.make
 bin/image.exe: C:/Windows/System32/OpenCL.DLL
 bin/image.exe: CMakeFiles/image.dir/linklibs.rsp
 bin/image.exe: CMakeFiles/image.dir/objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable bin/image.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:/Github/ImageProcess-CV/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable bin/image.exe"
 	"C:/Program Files/CMake/bin/cmake.exe" -E remove -f CMakeFiles/image.dir/objects.a
 	C:/mingw64/bin/ar.exe cr CMakeFiles/image.dir/objects.a @CMakeFiles/image.dir/objects1.rsp
 	C:/mingw64/bin/c++.exe    -Wl,--whole-archive CMakeFiles/image.dir/objects.a -Wl,--no-whole-archive  -o bin/image.exe -Wl,--out-implib,bin/libimage.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles/image.dir/linklibs.rsp
@@ -158,7 +185,8 @@ CMakeFiles/image.dir/build: bin/image.exe
 
 .PHONY : CMakeFiles/image.dir/build
 
-CMakeFiles/image.dir/requires: CMakeFiles/image.dir/test/BMPCodec.cpp.obj.requires
+CMakeFiles/image.dir/requires: CMakeFiles/image.dir/test/BMPDecode.cpp.obj.requires
+CMakeFiles/image.dir/requires: CMakeFiles/image.dir/test/TIFFDecode.cpp.obj.requires
 CMakeFiles/image.dir/requires: CMakeFiles/image.dir/test/TestBase.cpp.obj.requires
 CMakeFiles/image.dir/requires: CMakeFiles/image.dir/test/TestMain.cpp.obj.requires
 
